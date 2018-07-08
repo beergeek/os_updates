@@ -58,6 +58,6 @@ begin
     end
     exit 0
   end
-rescue
-  puts "There was a problem"
+rescue Exception => e
+  puts "There was a problem #{e}"
 end
