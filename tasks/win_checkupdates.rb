@@ -9,24 +9,20 @@ begin
   if ! Dir.exists?('C:\Windows\System32\WindowsPowerShell\v1.0\Modules\PSWindowsUpdate')
     case params['module_source']
     when 'PS Gallery'
-      download_cmd = '[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}; $webClient = New-Object System.Net.WebClient; $webClient.DownloadFile("https://gallery.technet.microsoft.com/scriptcenter/2d191bcd-3308-4edd-9de2-88dff796b0bc/file/41459/47/PSWindowsUpdate.zip","C:\Windows\temp\PSWindowsUpdate.zip")'
-      _stdout, _stderr, _status = Opens.capture3(download_cmd)
-      if _status != 0
-        puts 'Failed to download ZIP file'
-        exit -1
-      end
+      url = 'https://gallery.technet.microsoft.com/scriptcenter/2d191bcd-3308-4edd-9de2-88dff796b0bc/file/41459/47/PSWindowsUpdate.zip'
     when 'URL'
       if params['module_url'].nil? || params['module_url'].empty?
         puts '`module_url` is required if URL method of retrieving the PSWindowsUpdate module is selected'
         exit -1
       else
-        download_cmd = "[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}; $webClient = New-Object System.Net.WebClient; $webClient.DownloadFile('#{params['module_url']}','C:\\Windows\\temp\\PSWindowsUpdate.zip')"
-        _stdout, _stderr, _status = Opens.capture3(download_cmd)
-        if _status != 0
-          puts 'Failed to download ZIP file'
-          exit -1
-        end
+        url = params['module_url']
       end
+    end
+    download_cmd = "[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}; $webClient = New-Object System.Net.WebClient; $webClient.DownloadFile('#{url}','C:\\Windows\\temp\\PSWindowsUpdate.zip')"
+    _stdout, _stderr, _status = Opens.capture3(download_cmd)
+    if _status != 0
+      puts 'Failed to download ZIP file'
+      exit -1
     end
     # Unzip the file
     unzip_cmd = 'powershell -c "Expand-Archive -LiteralPath C:\Windows\temp\PSWindowsUpdate.zip -DestinationPath C:\Windows\System32\WindowsPowerShell\v1.0\Modules"'
