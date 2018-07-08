@@ -39,6 +39,10 @@ begin
     end
     unzip_cmd = 'powershell -c "Expand-Archive -LiteralPath C:\Windows\temp\PSWindowsUpdate.zip -DestinationPath C:\Windows\System32\WindowsPowerShell\v1.0\Modules"'
     _stdout, _stderr, _status = Opens.capture3(unzip_cmd)
+    if _status != 0
+      puts 'Failed to uncompress PSWindowsUpdate.zip'
+      exit -1
+    end
   end
   cmd_string = 'powershell -command "Import-Module PSWindowsUpdate"; Get-WUList -WindowsUpdate | Format-List -Property KB,Size,Title"'
   stdout, stderr, status = Open3.capture3(cmd_string)
