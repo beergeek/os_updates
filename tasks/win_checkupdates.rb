@@ -6,7 +6,7 @@ params = JSON.parse(STDIN.read)
 
 begin
   # Determine if the PSWindowsUpdate module is installed on disk and retrieve if it is not
-  if ! Dir.exists?("#{env['windir']}\\System32\\WindowsPowerShell\\v1.0\\Modules\\PSWindowsUpdate")
+  if ! Dir.exists?("#{ENV['windir']}\\System32\\WindowsPowerShell\\v1.0\\Modules\\PSWindowsUpdate")
     case params['module_source']
     when 'PS Gallery'
       url = 'https://gallery.technet.microsoft.com/scriptcenter/2d191bcd-3308-4edd-9de2-88dff796b0bc/file/41459/47/PSWindowsUpdate.zip'
@@ -18,14 +18,14 @@ begin
         url = params['module_url']
       end
     end
-    download_cmd = "[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}; $webClient = New-Object System.Net.WebClient; $webClient.DownloadFile('#{url}','#{env['TEMP']}\\PSWindowsUpdate.zip')"
+    download_cmd = "[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}; $webClient = New-Object System.Net.WebClient; $webClient.DownloadFile('#{url}','#{ENV['TEMP']}\\PSWindowsUpdate.zip')"
     _stdout, _stderr, _status = Open3.capture3(download_cmd)
     if _status != 0
       puts 'Failed to download ZIP file'
       exit -1
     end
     # Unzip the file
-    unzip_cmd = "powershell -c \"Expand-Archive -LiteralPath env['TEMP']\\PSWindowsUpdate.zip -DestinationPath #{env['windir']}\\System32\\WindowsPowerShell\\v1.0\\Modules\""
+    unzip_cmd = "powershell -c \"Expand-Archive -LiteralPath ENV['TEMP']\\PSWindowsUpdate.zip -DestinationPath #{ENV['windir']}\\System32\\WindowsPowerShell\\v1.0\\Modules\""
     _stdout, _stderr, _status = Open3.capture3(unzip_cmd)
     if _status != 0
       puts 'Failed to uncompress PSWindowsUpdate.zip'
