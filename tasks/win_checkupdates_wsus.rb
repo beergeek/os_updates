@@ -46,9 +46,9 @@ begin
   end
   cmd_string = 'powershell -command "Import-Module PSWindowsUpdate"; Get-WUList -WindowsUpdate | Format-List -Property KB,Size,Title"'
   stdout, stderr, status = Open3.capture3(cmd_string)
-  raise 'Output not recognised', stderr if status != 0
+  raise "Output not recognised: #{stdout}", stderr if status != 0
   puts stdout.strip
   exit 0
-rescue
-  puts 'Output not recognised'
+rescue Exception => e
+  puts "There was a problem #{e}"
 end
