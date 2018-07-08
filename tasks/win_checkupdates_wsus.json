@@ -9,7 +9,7 @@
     },
     "module_url": {
       "description": "The URL of the PSWindowsUpdate.zip file (including the file name) to be downloaded, e.g. 'https://fileserver/PSWindowsUpdate.zip'",
-      "type": "Optional[Stdlib::Httpurl]"
+      "type": "Optional[String[1]]"
     }
   }
 }
