@@ -1,11 +1,11 @@
 {
   "puppet_task_version": 1,
   "supports_noop": false,
-  "description": "A short description of this task",
+  "description": "This task determines the available patches and updates from WSUS or Microsoft Update, which ever is configured.",
   "parameters": {
     "module_source": {
-      "description": "The location of the source zip file for the PSWindowsUpdate Powershell Module.",
-      "type": "Enum['puppet','PSGallery','URL']"
+      "description": "The location, if required, of the source zip file for the PSWindowsUpdate Powershell Module.",
+      "type": "Enum['PSGallery','URL']"
     },
     "module_url": {
       "description": "The URL of the PSWindowsUpdate.zip file (including the file name) to be downloaded, e.g. 'https://fileserver/PSWindowsUpdate.zip'",
