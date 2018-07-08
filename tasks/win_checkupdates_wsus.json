@@ -5,7 +5,7 @@
   "parameters": {
     "module_source": {
       "description": "The location of the source zip file for the PSWindowsUpdate Powershell Module.",
-      "type": "Enum['puppet','PS Gallery','URL']"
+      "type": "Enum['puppet','PSGallery','URL']"
     },
     "module_url": {
       "description": "The URL of the PSWindowsUpdate.zip file (including the file name) to be downloaded, e.g. 'https://fileserver/PSWindowsUpdate.zip'",
