@@ -2,11 +2,14 @@
   "name": "beergeek-os_update",
   "version": "0.1.0",
   "author": "beergeek",
-  "summary": "",
+  "summary": "A module containing tasks to check and apply system and application patches/updates",
   "license": "Apache-2.0",
-  "source": "",
+  "source": "https://github.com/beergeek/os_updates.git",
   "dependencies": [
-
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.13.1 < 5.0.0"
+    }
   ],
   "operatingsystem_support": [
     {
