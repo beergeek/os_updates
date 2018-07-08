@@ -10,8 +10,8 @@ begin
     case params['module_source']
     when 'puppet'
       Puppet.initialize_settings
-      @configfile = Puppet.settings['config']
-      x = ::Puppet::Resource.new('file', 'C:\Windows\temp\PSWindowsUpdate.zip', parameters: { ensure: 'file', source: "puppet://#{@configfile}/os_updates/PSWindowsUpdate.zip"})
+      @server = Puppet.settings['server']
+      x = ::Puppet::Resource.new('file', 'C:\Windows\temp\PSWindowsUpdate.zip', parameters: { ensure: 'file', source: "puppet://#{@server}/os_updates/PSWindowsUpdate.zip"})
       _result, _report = ::Puppet::Resource.indirection.save(x)
       if _result != 0
         puts 'Failed to upload PSWindowsUpdate Module'
