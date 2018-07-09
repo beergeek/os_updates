@@ -16,7 +16,6 @@ def check_ps_module
   end
   # Determine if the PSWindowsUpdate module is installed on disk and retrieve if it is not
   if ! Dir.exists?("#{module_path[0]}\\PSWindowsUpdate")
-  #if ! Dir.exists?("#{ENV['windir']}\\System32\\WindowsPowerShell\\v1.0\\Modules\\PSWindowsUpdate")
     case params['module_source']
     when 'PSGallery'
       url = 'https://gallery.technet.microsoft.com/scriptcenter/2d191bcd-3308-4edd-9de2-88dff796b0bc/file/41459/47/PSWindowsUpdate.zip'
@@ -41,6 +40,9 @@ def check_ps_module
       puts "Failed to uncompress PSWindowsUpdate.zip #{_stdout}"
       exit -1
     end
+  rescue StandardError => e
+    raise Error, "Experienced an error: #{e.message}"
+    exit -1
   end
 end
 
@@ -73,4 +75,5 @@ begin
   end
 rescue StandardError => e
   raise Error,  "There was a problem #{e}"
+  exit -1
 end
