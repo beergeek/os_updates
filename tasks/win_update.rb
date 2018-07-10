@@ -6,39 +6,41 @@ require 'win32/registry'
 params = JSON.parse(STDIN.read)
 
 def check_ps_module
-  # Determine if the PSWindowsUpdate module is installed on disk and retrieve if it is not
-  # Get registry setting for Powershell module directory
-  reg_key = Win32::Registry::HKEY_LOCAL_MACHINE.open('System\CurrentControlSet\Control\Session Manager\Environment')
-  module_path = (reg_key['PSModulePath']).split(';') || nil
-  if module_path.nil? || module_path.empty?
-    puts 'No module path for Powershell was found in the registry'
-    exit -1
-  end
-  # Determine if the PSWindowsUpdate module is installed on disk and retrieve if it is not
-  if ! Dir.exists?("#{module_path[0]}\\PSWindowsUpdate")
-    case params['module_source']
-    when 'PSGallery'
-      url = 'https://gallery.technet.microsoft.com/scriptcenter/2d191bcd-3308-4edd-9de2-88dff796b0bc/file/41459/47/PSWindowsUpdate.zip'
-    when 'URL'
-      if params['module_url'].nil? || params['module_url'].empty?
-        puts '`module_url` is required if URL method of retrieving the PSWindowsUpdate module is selected'
-        exit -1
-      else
-        url = params['module_url']
+  begin
+    # Determine if the PSWindowsUpdate module is installed on disk and retrieve if it is not
+    # Get registry setting for Powershell module directory
+    reg_key = Win32::Registry::HKEY_LOCAL_MACHINE.open('System\CurrentControlSet\Control\Session Manager\Environment')
+    module_path = (reg_key['PSModulePath']).split(';') || nil
+    if module_path.nil? || module_path.empty?
+      puts 'No module path for Powershell was found in the registry'
+      exit -1
+    end
+    # Determine if the PSWindowsUpdate module is installed on disk and retrieve if it is not
+    if ! Dir.exists?("#{module_path[0]}\\PSWindowsUpdate")
+      case params['module_source']
+      when 'PSGallery'
+        url = 'https://gallery.technet.microsoft.com/scriptcenter/2d191bcd-3308-4edd-9de2-88dff796b0bc/file/41459/47/PSWindowsUpdate.zip'
+      when 'URL'
+        if params['module_url'].nil? || params['module_url'].empty?
+          puts '`module_url` is required if URL method of retrieving the PSWindowsUpdate module is selected'
+          exit -1
+        else
+          url = params['module_url']
+        end
       end
-    end
-    download_cmd = "powershell -command \"[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}; $webClient = New-Object System.Net.WebClient; $webClient.DownloadFile('#{url}','#{ENV['TEMP']}\\PSWindowsUpdate.zip')\""
-    _stdout, _stderr, _status = Open3.capture3(download_cmd)
-    if _status != 0
-      puts 'Failed to download ZIP file'
-      exit -1
-    end
-    # Unzip the file
-    unzip_cmd = "powershell -command \"Expand-Archive -LiteralPath '#{ENV['TEMP']}\\PSWindowsUpdate.zip' -DestinationPath '#{module_path[0]}'\""
-    _stdout, _stderr, _status = Open3.capture3(unzip_cmd)
-    if _status != 0
-      puts "Failed to uncompress PSWindowsUpdate.zip #{_stdout}"
-      exit -1
+      download_cmd = "powershell -command \"[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}; $webClient = New-Object System.Net.WebClient; $webClient.DownloadFile('#{url}','#{ENV['TEMP']}\\PSWindowsUpdate.zip')\""
+      _stdout, _stderr, _status = Open3.capture3(download_cmd)
+      if _status != 0
+        puts 'Failed to download ZIP file'
+        exit -1
+      end
+      # Unzip the file
+      unzip_cmd = "powershell -command \"Expand-Archive -LiteralPath '#{ENV['TEMP']}\\PSWindowsUpdate.zip' -DestinationPath '#{module_path[0]}'\""
+      _stdout, _stderr, _status = Open3.capture3(unzip_cmd)
+      if _status != 0
+        puts "Failed to uncompress PSWindowsUpdate.zip #{_stdout}"
+        exit -1
+      end
     end
   rescue StandardError => e
     raise Error, "Experienced an error: #{e.message}"
