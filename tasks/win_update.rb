@@ -68,12 +68,13 @@ begin
     end
     # run the relevant command
     stdout, stderr, status = Open3.capture3(cmd_string)
-    if stdout and !stdout.nil? and !stdout.empty?
-      puts stdout.strip
+    if status == 0
+      puts 'Patches applied'
+      exit 0
     else
-      puts "No patches or updates found"
+      puts 'Could not apply patch'
+      exit -1
     end
-    exit 0
   end
 rescue StandardError => e
   raise Error,  "There was a problem #{e}"
