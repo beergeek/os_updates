@@ -7,6 +7,10 @@
       "description": "The Knowledge Base Article number, such as KB4093753, to update",
       "type": "String[1]"
     },
+    "allow_reboot": {
+      "description": "Boolean value to determine if the node will rebooted after the patch is applied, if required",
+      "type": "Boolean[true]"
+    },
     "module_source": {
       "description": "The location, if required, of the source zip file for the PSWindowsUpdate Powershell Module.",
       "type": "Enum['PSGallery','URL']"
