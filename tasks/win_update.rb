@@ -43,7 +43,7 @@ def check_ps_module
       end
     end
   rescue StandardError => e
-    raise Error, "Experienced an error: #{e.message}"
+    raise "Experienced an error: #{e.message}"
     exit -1
   end
 end
@@ -80,6 +80,6 @@ begin
     end
   end
 rescue StandardError => e
-  raise Error,  "There was a problem #{e}"
+  raise "There was a problem #{e.message}"
   exit -1
 end
