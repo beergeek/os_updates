@@ -74,7 +74,7 @@ begin
     # run the relevant command
     stdout, stderr, status = Open3.capture3(cmd_string)
     if status == 0
-      puts 'Patches applied'
+      puts stdout.strip
       exit 0
     else
       puts 'Could not apply patch'
