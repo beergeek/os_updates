@@ -54,9 +54,9 @@ begin
   _stdout, _stderr, _status = Open3.capture3(manager_cmd)
   raise "Cannot get Windows Update configurations ", _stderr if _status != 0
   # Determine which service is enable can use that to apply patches and updates
-  if params['allow_reboot'] == false {
+  if params['allow_reboot'] == false
     _allow_reboot = '-IgnoreReboot'
-  }
+  end
   if _stdout
     case _stdout.strip
     when '3da21691-e39d-4da6-8a4b-b43877bcb1b7'
