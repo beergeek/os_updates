@@ -56,6 +56,8 @@ begin
   # Determine which service is enable can use that to apply patches and updates
   if params['allow_reboot'] == false
     _allow_reboot = '-IgnoreReboot'
+  else
+    _allow_reboot = ''
   end
   if _stdout
     case _stdout.strip
