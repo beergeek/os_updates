@@ -1,0 +1,11 @@
+{
+  "puppet_task_version": 1,
+  "supports_noop": false,
+  "description": "Pin packages on EL node(s)",
+  "parameters": {
+    "package_name": {
+      "description": "Name of the package to update, can use wildcards. E.g. gcc-*",
+      "type": "String[1]"
+    }
+  }
+}
