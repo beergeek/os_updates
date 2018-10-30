@@ -16,7 +16,10 @@ begin
   ensure_yumversion()
   cmd_string = "yum versionlock #{params['package_name']}"
   stdout, _stderr, status = Open3.capture3(cmd_string)
-  puts stdout unless status != 0
+  puts "Could pin package(s)" unless status == 0
+  list_string = 'yum versionlock list'
+  stdout, _stderr, status = Open3.capture3(cmd_string)
+  puts "Could retrieve pin list" unless status == 0
 rescue => e
-  raise "Could not update: #{e.message}"
+  raise "Could pin package(s): #{e.message}"
 end
