@@ -12,7 +12,7 @@ end
 
 begin
   ensure_yumversion
-  cmd_string = "yum versionlock clear"
+  cmd_string = 'yum versionlock clear'
   stdout, _stderr, status = Open3.capture3(cmd_string)
   puts stdout unless status != 0
 rescue => e
