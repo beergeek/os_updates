@@ -67,8 +67,8 @@ begin
     when '7971f918-a847-4430-9279-4a52d1efe18d'
       cmd_string = "powershell -command \"Import-Module PSWindowsUpdate; Get-WUInstall -MicrosoftUpdate -KBArticleID '#{params['kb_id']}' -AcceptAll #{allow_reboot}\""
     else
-      puts 'No Update Services configured'
-      exit 0
+      puts 'No Update Services configured, using Windows Update.'
+      cmd_string = 'powershell -command "Import-Module PSWindowsUpdate; Get-WUList -WindowsUpdate | Format-List -Property KB,Size,Title"'
     end
     # run the relevant command
     stdout, _stderr, status = Open3.capture3(cmd_string)
