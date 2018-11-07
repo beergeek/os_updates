@@ -48,6 +48,8 @@ rescue StandardError => e
 end
 
 begin
+  # Determine if PSWindowsUpdate is installed
+  check_ps_module
   # Find if we are using WSUS or Windows Update
   manager_cmd = "powershell -command \"Import-Module PSWindowsUpdate; Get-WUServiceManager | Where-Object {$_.IsManaged -eq 'true'} | foreach {$_.ServiceID}\""
   stdout, stderr, status = Open3.capture3(manager_cmd)
