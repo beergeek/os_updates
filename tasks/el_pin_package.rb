@@ -2,9 +2,7 @@
 require 'open3'
 require 'json'
 
-# rubocop:disable Lint/UselessAssignment
 params = JSON.parse(STDIN.read)
-# rubocop:enable Lint/UselessAssignment
 
 def ensure_yumversion
   cmd_string = 'puppet resource package yum-plugin-versionlock ensure=present'

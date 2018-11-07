@@ -3,9 +3,7 @@ require 'open3'
 require 'json'
 require 'win32/registry'
 
-# rubocop:disable Lint/UselessAssignment
 params = JSON.parse(STDIN.read)
-# rubocop:enable Lint/UselessAssignment
 
 def check_ps_module(data)
   # Determine if the PSWindowsUpdate module is installed on disk and retrieve if it is not
