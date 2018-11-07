@@ -5,7 +5,7 @@ require 'win32/registry'
 
 params = JSON.parse(STDIN.read)
 
-def check_ps_module
+def check_ps_module(data)
   # Determine if the PSWindowsUpdate module is installed on disk and retrieve if it is not
   # Get registry setting for Powershell module directory
   reg_key = Win32::Registry::HKEY_LOCAL_MACHINE.open('System\CurrentControlSet\Control\Session Manager\Environment')
@@ -16,15 +16,15 @@ def check_ps_module
   end
   # Determine if the PSWindowsUpdate module is installed on disk and retrieve if it is not
   unless Dir.exist?("#{module_path[0]}\\PSWindowsUpdate")
-    case params['module_source']
+    case data['module_source']
     when 'PSGallery'
       url = 'https://gallery.technet.microsoft.com/scriptcenter/2d191bcd-3308-4edd-9de2-88dff796b0bc/file/41459/47/PSWindowsUpdate.zip'
     when 'URL'
-      if params['module_url'].nil? || params['module_url'].empty?
+      if data['module_url'].nil? || data['module_url'].empty?
         puts '`module_url` is required if URL method of retrieving the PSWindowsUpdate module is selected'
         exit 1
       else
-        url = params['module_url']
+        url = data['module_url']
       end
     end
     download_cmd = "powershell -command \"[Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}; $webClient = New-Object System.Net.WebClient; $webClient.DownloadFile('#{url}','#{ENV['TEMP']}\\PSWindowsUpdate.zip')\"" # rubocop:disable Metrics/LineLength
@@ -47,7 +47,7 @@ end
 
 begin
   # Determine if PSWindowsUpdate is installed
-  check_ps_module
+  check_ps_module(params)
   # Find if we are using WSUS or Windows Update
   manager_cmd = "powershell -command \"Import-Module PSWindowsUpdate; Get-WUServiceManager | Where-Object {$_.IsManaged -eq 'true'} | foreach {$_.ServiceID}\""
   stdout, stderr, status = Open3.capture3(manager_cmd)
