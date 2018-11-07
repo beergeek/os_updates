@@ -75,5 +75,5 @@ begin
     exit 0
   end
 rescue StandardError => e
-  raise "There was a problem #{e}"
+  raise "There was a problem: #{e.message}"
 end
